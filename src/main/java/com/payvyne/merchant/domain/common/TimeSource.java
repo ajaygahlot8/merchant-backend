@@ -1,13 +1,13 @@
 package com.payvyne.merchant.domain.common;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.TimeZone;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TimeSource {
 
-  public OffsetDateTime now() {
-    return OffsetDateTime.now(TimeZone.getDefault().toZoneId());
+  public LocalDateTime now() {
+    return LocalDateTime.now(TimeZone.getDefault().toZoneId());
   }
 }

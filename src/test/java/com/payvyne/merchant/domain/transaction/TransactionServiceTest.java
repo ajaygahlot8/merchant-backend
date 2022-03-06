@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import com.payvyne.merchant.domain.common.TimeSource;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +40,7 @@ class TransactionServiceTest {
     var status = TransactionStatus.SUCCEED;
     var currency = CurrencyEnum.GBP;
     var description = "Purchased laptop";
-    var now = OffsetDateTime.parse("2022-03-07T12:30:30.123+00:00");
+    var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
 
     var transactionDetail =
