@@ -42,7 +42,7 @@ class TransactionServiceTest {
 
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.SUCCEED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -83,7 +83,7 @@ class TransactionServiceTest {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.PENDING;
     var newTransactionStatus = TransactionStatus.FAILED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -129,7 +129,7 @@ class TransactionServiceTest {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.PENDING;
     var newTransactionStatus = TransactionStatus.FAILED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -166,7 +166,7 @@ class TransactionServiceTest {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.PENDING;
     var newTransactionStatus = TransactionStatus.PENDING;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -203,7 +203,7 @@ class TransactionServiceTest {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.PENDING;
     var newTransactionStatus = TransactionStatus.DELETED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -239,7 +239,7 @@ class TransactionServiceTest {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.PENDING;
     var newTransactionStatus = TransactionStatus.DELETED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -285,7 +285,7 @@ class TransactionServiceTest {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.PENDING;
     var newTransactionStatus = TransactionStatus.FAILED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");

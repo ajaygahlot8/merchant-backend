@@ -16,7 +16,7 @@ public class Transaction {
 
   @NonNull private final BigDecimal amount;
 
-  @NonNull private final CurrencyEnum currency;
+  @NonNull private final Currency currency;
 
   @NonNull private final TransactionStatus status;
 

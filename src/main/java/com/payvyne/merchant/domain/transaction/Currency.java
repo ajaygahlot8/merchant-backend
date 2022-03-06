@@ -1,6 +1,6 @@
 package com.payvyne.merchant.domain.transaction;
 
-public enum CurrencyEnum {
+public enum Currency {
   GBP,
   USD
 }

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.payvyne.merchant.domain.transaction.CurrencyEnum;
+import com.payvyne.merchant.domain.transaction.Currency;
 import com.payvyne.merchant.domain.transaction.Transaction;
 import com.payvyne.merchant.domain.transaction.TransactionStatus;
 import java.math.BigDecimal;
@@ -36,7 +36,7 @@ class TransactionDAOIntegrationTest {
   void testCreateAndGetAllTransactions() {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.SUCCEED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -62,7 +62,7 @@ class TransactionDAOIntegrationTest {
   void testGetTransactionById() {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.SUCCEED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -91,7 +91,7 @@ class TransactionDAOIntegrationTest {
   void testGetTransactionByIdForDeletedTransaction() {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.DELETED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
@@ -119,7 +119,7 @@ class TransactionDAOIntegrationTest {
   void testUpdateTransaction() {
     var amount = BigDecimal.valueOf(1000.50);
     var status = TransactionStatus.DELETED;
-    var currency = CurrencyEnum.GBP;
+    var currency = Currency.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
     var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");

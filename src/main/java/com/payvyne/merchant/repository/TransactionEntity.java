@@ -1,6 +1,6 @@
 package com.payvyne.merchant.repository;
 
-import com.payvyne.merchant.domain.transaction.CurrencyEnum;
+import com.payvyne.merchant.domain.transaction.Currency;
 import com.payvyne.merchant.domain.transaction.Transaction;
 import com.payvyne.merchant.domain.transaction.TransactionStatus;
 import java.math.BigDecimal;
@@ -55,7 +55,7 @@ public class TransactionEntity {
     return Transaction.builder()
         .amount(this.amount)
         .status(TransactionStatus.valueOf(this.status))
-        .currency(CurrencyEnum.valueOf(this.currency))
+        .currency(Currency.valueOf(this.currency))
         .description(this.description)
         .id(this.id)
         .createdAt(this.createdAt)
