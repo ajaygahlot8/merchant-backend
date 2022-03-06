@@ -2,6 +2,7 @@ package com.payvyne.merchant.domain.transaction;
 
 import com.payvyne.merchant.domain.common.TimeSource;
 import com.payvyne.merchant.exception.ErrorCode;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.util.IdGenerator;
@@ -90,5 +91,9 @@ public class TransactionService {
             .build();
 
     return transactionRepositoryPort.update(updatedTransaction);
+  }
+
+  public List<Transaction> search() {
+    return transactionRepositoryPort.getAllTransactions();
   }
 }

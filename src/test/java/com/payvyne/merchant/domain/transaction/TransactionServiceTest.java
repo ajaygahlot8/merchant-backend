@@ -11,6 +11,7 @@ import com.payvyne.merchant.domain.common.TimeSource;
 import com.payvyne.merchant.exception.ErrorCode;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -312,5 +313,36 @@ class TransactionServiceTest {
     assertEquals(ErrorCode.T1, exception.getError());
     verify(transactionRepositoryPort, times(1)).getTransactionById(id);
     verify(transactionRepositoryPort, times(0)).update(any());
+  }
+
+  @Test
+  @DisplayName("Should get all transactions")
+  void testGetAllTransactions() {
+
+    var amount = BigDecimal.valueOf(1000.50);
+    var status = TransactionStatus.PENDING;
+    var currency = Currency.GBP;
+    var description = "Purchased laptop";
+    var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
+    var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
+    var yesterday = now.minusDays(1);
+
+    var transaction =
+        Transaction.builder()
+            .amount(amount)
+            .status(status)
+            .currency(currency)
+            .description(description)
+            .id(id)
+            .createdAt(yesterday)
+            .updatedAt(yesterday)
+            .build();
+
+    when(transactionRepositoryPort.getAllTransactions()).thenReturn(List.of(transaction));
+
+    var actual = transactionService.search();
+
+    assertEquals(List.of(transaction), actual);
+    verify(transactionRepositoryPort, times(1)).getAllTransactions();
   }
 }

@@ -156,4 +156,46 @@ class TransactionDAOIntegrationTest {
     assertTrue(actual.isPresent());
     assertEquals(updatedTransaction, actual.get());
   }
+
+  @DisplayName("Should get all transactions")
+  @Test
+  void testGetAllTransactions() {
+    var amount = BigDecimal.valueOf(1000.50);
+    var status = TransactionStatus.PENDING;
+    var currency = Currency.GBP;
+    var description = "Purchased laptop";
+    var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
+    var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
+    var id2 = UUID.fromString("a658a23b-786a-48b5-8c07-aa84311d79d6");
+    var yesterday = now.minusDays(1);
+
+    var transaction =
+        Transaction.builder()
+            .amount(amount)
+            .status(status)
+            .currency(currency)
+            .description(description)
+            .id(id)
+            .createdAt(yesterday)
+            .updatedAt(yesterday)
+            .build();
+
+    var transaction2 =
+        Transaction.builder()
+            .amount(amount)
+            .status(status)
+            .currency(currency)
+            .description(description)
+            .id(id2)
+            .createdAt(yesterday)
+            .updatedAt(yesterday)
+            .build();
+
+    transactionDao.create(transaction);
+    transactionDao.create(transaction2);
+
+    var actual = transactionDao.getAllTransactions();
+
+    assertEquals(2, actual.size());
+  }
 }
