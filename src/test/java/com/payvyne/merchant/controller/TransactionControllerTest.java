@@ -1,5 +1,6 @@
 package com.payvyne.merchant.controller;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,8 +16,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.payvyne.merchant.domain.transaction.Currency;
 import com.payvyne.merchant.domain.transaction.Transaction;
 import com.payvyne.merchant.domain.transaction.TransactionDetail;
+import com.payvyne.merchant.domain.transaction.TransactionException;
 import com.payvyne.merchant.domain.transaction.TransactionService;
 import com.payvyne.merchant.domain.transaction.TransactionStatus;
+import com.payvyne.merchant.exception.ErrorCode;
 import com.payvyne.merchant.rest.model.CreateTransactionRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -205,6 +208,26 @@ public class TransactionControllerTest {
         .andExpect(content().json(expectedResponse));
 
     verify(transactionService, times(1)).search();
+  }
+
+  @Test
+  @DisplayName("Should not be able to delete transaction if transaction not found")
+  void testDeleteTransactionWithInvalidId() throws Exception {
+
+    var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
+
+    var expectedResponse =
+        "{\"success\":false,\"error\":{\"code\":\"T1\",\"message\":\"Transaction not found\"}}";
+
+    doThrow(new TransactionException(ErrorCode.T1)).when(transactionService).delete(id);
+
+    mockMvc
+        .perform(delete("/v1/transaction/" + id).contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().is5xxServerError())
+        .andExpect(content().json(expectedResponse));
+
+    verify(transactionService, times(1)).delete(id);
   }
 
   public static String asJsonString(final Object obj) {
