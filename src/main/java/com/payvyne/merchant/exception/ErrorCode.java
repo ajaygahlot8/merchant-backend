@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+  E1("Internal Server Error"),
   T1("Transaction not found"),
   T2("Current transaction status is same as new transaction status"),
   T3("Transaction already deleted"),
