@@ -27,7 +27,7 @@ public class TransactionDAO implements TransactionRepositoryPort {
 
   @Override
   public Optional<Transaction> getTransactionById(UUID transactionId) {
-    var transactionEntity = transactionRepository.findById(transactionId);
+    var transactionEntity = transactionRepository.findTransactionById(transactionId);
     return transactionEntity.map(TransactionEntity::toTransaction);
   }
 

@@ -5,7 +5,9 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
   T1("Transaction not found"),
-  T2("Current transaction status is same as new transaction status");
+  T2("Current transaction status is same as new transaction status"),
+  T3("Transaction already deleted"),
+  T4("Transaction cannot be deleted via update API");
 
   private final String message;
   private final String code;

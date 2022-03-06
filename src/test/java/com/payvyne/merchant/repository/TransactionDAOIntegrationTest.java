@@ -1,6 +1,7 @@
 package com.payvyne.merchant.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.payvyne.merchant.domain.transaction.CurrencyEnum;
@@ -85,11 +86,39 @@ class TransactionDAOIntegrationTest {
     assertEquals(transaction, actual.get());
   }
 
+  @DisplayName("Should not get transaction by id for status DELETED")
+  @Test
+  void testGetTransactionByIdForDeletedTransaction() {
+    var amount = BigDecimal.valueOf(1000.50);
+    var status = TransactionStatus.DELETED;
+    var currency = CurrencyEnum.GBP;
+    var description = "Purchased laptop";
+    var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
+    var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
+
+    var transaction =
+        Transaction.builder()
+            .amount(amount)
+            .status(status)
+            .currency(currency)
+            .description(description)
+            .id(id)
+            .createdAt(now)
+            .updatedAt(now)
+            .build();
+
+    transactionDao.create(transaction);
+
+    var actual = transactionDao.getTransactionById(transaction.getId());
+
+    assertFalse(actual.isPresent());
+  }
+
   @DisplayName("Should update transaction")
   @Test
   void testUpdateTransaction() {
     var amount = BigDecimal.valueOf(1000.50);
-    var status = TransactionStatus.SUCCEED;
+    var status = TransactionStatus.DELETED;
     var currency = CurrencyEnum.GBP;
     var description = "Purchased laptop";
     var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
@@ -110,7 +139,7 @@ class TransactionDAOIntegrationTest {
     var updatedTransaction =
         Transaction.builder()
             .amount(amount)
-            .status(TransactionStatus.DELETED)
+            .status(TransactionStatus.SUCCEED)
             .currency(currency)
             .description(description)
             .id(id)

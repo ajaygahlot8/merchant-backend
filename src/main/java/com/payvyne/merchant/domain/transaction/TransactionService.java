@@ -42,6 +42,10 @@ public class TransactionService {
 
   public Transaction update(TransactionStatus newStatus, UUID transactionId) {
 
+    if (newStatus == TransactionStatus.DELETED) {
+      throw new TransactionException(ErrorCode.T4);
+    }
+
     var transaction = transactionRepositoryPort.getTransactionById(transactionId);
 
     if (transaction.isEmpty()) {
@@ -58,6 +62,28 @@ public class TransactionService {
             .amount(transaction.get().getAmount())
             .currency(transaction.get().getCurrency())
             .status(newStatus)
+            .createdAt(transaction.get().getCreatedAt())
+            .updatedAt(timeSource.now())
+            .description(transaction.get().getDescription().orElse(null))
+            .build();
+
+    return transactionRepositoryPort.update(updatedTransaction);
+  }
+
+  public Transaction delete(UUID transactionId) {
+
+    var transaction = transactionRepositoryPort.getTransactionById(transactionId);
+
+    if (transaction.isEmpty()) {
+      throw new TransactionException(ErrorCode.T1);
+    }
+
+    var updatedTransaction =
+        Transaction.builder()
+            .id(transaction.get().getId())
+            .amount(transaction.get().getAmount())
+            .currency(transaction.get().getCurrency())
+            .status(TransactionStatus.DELETED)
             .createdAt(transaction.get().getCreatedAt())
             .updatedAt(timeSource.now())
             .description(transaction.get().getDescription().orElse(null))

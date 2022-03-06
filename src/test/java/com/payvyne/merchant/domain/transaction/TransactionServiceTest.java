@@ -123,7 +123,7 @@ class TransactionServiceTest {
   }
 
   @Test
-  @DisplayName("Should not update transaction if transaction not preset")
+  @DisplayName("Should not update transaction if transaction not present")
   void testThrowExceptionIfTransactionNotPresentWhileUpdating() {
 
     var amount = BigDecimal.valueOf(1000.50);
@@ -192,6 +192,124 @@ class TransactionServiceTest {
             () -> transactionService.update(newTransactionStatus, transaction.getId()));
 
     assertEquals(ErrorCode.T2, exception.getError());
+    verify(transactionRepositoryPort, times(1)).getTransactionById(id);
+    verify(transactionRepositoryPort, times(0)).update(any());
+  }
+
+  @Test
+  @DisplayName("Should not update transaction if new transaction status is DELETED")
+  void testThrowExceptionIfTransactionStatusIsDeleted() {
+
+    var amount = BigDecimal.valueOf(1000.50);
+    var status = TransactionStatus.PENDING;
+    var newTransactionStatus = TransactionStatus.DELETED;
+    var currency = CurrencyEnum.GBP;
+    var description = "Purchased laptop";
+    var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
+    var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
+    var yesterday = now.minusDays(1);
+
+    var transaction =
+        Transaction.builder()
+            .amount(amount)
+            .status(status)
+            .currency(currency)
+            .description(description)
+            .id(id)
+            .createdAt(yesterday)
+            .updatedAt(yesterday)
+            .build();
+
+    when(timeSource.now()).thenReturn(now);
+
+    var exception =
+        assertThrows(
+            TransactionException.class,
+            () -> transactionService.update(newTransactionStatus, transaction.getId()));
+
+    assertEquals(ErrorCode.T4, exception.getError());
+    verify(transactionRepositoryPort, times(0)).getTransactionById(id);
+    verify(transactionRepositoryPort, times(0)).update(any());
+  }
+
+  @Test
+  @DisplayName("Should delete transaction")
+  void testDeleteTransaction() {
+
+    var amount = BigDecimal.valueOf(1000.50);
+    var status = TransactionStatus.PENDING;
+    var newTransactionStatus = TransactionStatus.DELETED;
+    var currency = CurrencyEnum.GBP;
+    var description = "Purchased laptop";
+    var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
+    var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
+    var yesterday = now.minusDays(1);
+
+    var transaction =
+        Transaction.builder()
+            .amount(amount)
+            .status(status)
+            .currency(currency)
+            .description(description)
+            .id(id)
+            .createdAt(yesterday)
+            .updatedAt(yesterday)
+            .build();
+
+    var newTransaction =
+        Transaction.builder()
+            .amount(amount)
+            .status(newTransactionStatus)
+            .currency(currency)
+            .description(description)
+            .id(id)
+            .createdAt(yesterday)
+            .updatedAt(now)
+            .build();
+
+    when(timeSource.now()).thenReturn(now);
+    when(transactionRepositoryPort.getTransactionById(id)).thenReturn(Optional.of(transaction));
+    when(transactionRepositoryPort.update(newTransaction)).thenReturn(newTransaction);
+
+    var actual = transactionService.delete(transaction.getId());
+
+    assertEquals(newTransaction, actual);
+    verify(transactionRepositoryPort, times(1)).getTransactionById(id);
+    verify(transactionRepositoryPort, times(1)).update(newTransaction);
+  }
+
+  @Test
+  @DisplayName("Should not delete transaction if transaction not present")
+  void testThrowExceptionIfTransactionNotPresentWhileDeleting() {
+
+    var amount = BigDecimal.valueOf(1000.50);
+    var status = TransactionStatus.PENDING;
+    var newTransactionStatus = TransactionStatus.FAILED;
+    var currency = CurrencyEnum.GBP;
+    var description = "Purchased laptop";
+    var now = LocalDateTime.parse("2022-03-07T12:30:30.123");
+    var id = UUID.fromString("c658a23b-786a-48b5-8c07-aa84311d79d6");
+    var yesterday = now.minusDays(1);
+
+    var transaction =
+        Transaction.builder()
+            .amount(amount)
+            .status(status)
+            .currency(currency)
+            .description(description)
+            .id(id)
+            .createdAt(yesterday)
+            .updatedAt(yesterday)
+            .build();
+
+    when(timeSource.now()).thenReturn(now);
+    when(transactionRepositoryPort.getTransactionById(id)).thenReturn(Optional.empty());
+
+    var exception =
+        assertThrows(
+            TransactionException.class, () -> transactionService.delete(transaction.getId()));
+
+    assertEquals(ErrorCode.T1, exception.getError());
     verify(transactionRepositoryPort, times(1)).getTransactionById(id);
     verify(transactionRepositoryPort, times(0)).update(any());
   }
