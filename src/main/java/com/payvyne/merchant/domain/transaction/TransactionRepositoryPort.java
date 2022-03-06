@@ -7,4 +7,6 @@ public interface TransactionRepositoryPort {
   Transaction create(Transaction transaction);
 
   Optional<Transaction> getTransactionById(UUID transactionId);
+
+  Transaction update(Transaction updatedTransaction);
 }

@@ -30,4 +30,9 @@ public class TransactionDAO implements TransactionRepositoryPort {
     var transactionEntity = transactionRepository.findById(transactionId);
     return transactionEntity.map(TransactionEntity::toTransaction);
   }
+
+  @Override
+  public Transaction update(Transaction updatedTransaction) {
+    return transactionRepository.save(TransactionEntity.from(updatedTransaction)).toTransaction();
+  }
 }
