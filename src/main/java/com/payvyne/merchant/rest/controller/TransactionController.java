@@ -64,14 +64,18 @@ public class TransactionController {
 
   @GetMapping(value = "/v1/transactions")
   public ApiResponse<GetTransactionsResponse> getAllTransactions(
-      @RequestParam(required = false) TransactionStatus status,
+      @RequestParam(required = false) String status,
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-      @RequestParam(required = false) Currency currency) {
+      @RequestParam(required = false) String currency) {
 
     log.info("Received request to get all transactions");
     var transactions =
         transactionService.search(
-            TransactionQuery.builder().date(date).currency(currency).status(status).build());
+            TransactionQuery.builder()
+                .date(date)
+                .currency(Currency.valueOf(currency))
+                .status(TransactionStatus.valueOf(status))
+                .build());
 
     return ApiResponse.createSuccessResponse(GetTransactionsResponse.from(transactions));
   }
