@@ -23,4 +23,8 @@ public class ApiResponse<D> {
   public static <D> ApiResponse<D> createSuccessResponse(final D data) {
     return new ApiResponse<>(true, data, null);
   }
+
+  public static <D> ApiResponse<D> createErrorResponseWithData(final D data) {
+    return new ApiResponse<>(false, data, null);
+  }
 }

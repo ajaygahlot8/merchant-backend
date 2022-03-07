@@ -7,6 +7,7 @@ import com.payvyne.merchant.domain.transaction.TransactionStatus;
 import com.payvyne.merchant.rest.ApiResponse;
 import com.payvyne.merchant.rest.model.CreateTransactionRequest;
 import com.payvyne.merchant.rest.model.GetTransactionsResponse;
+import com.payvyne.merchant.rest.model.UpdateTransactionRequest;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -42,10 +43,10 @@ public class TransactionController {
 
   @PutMapping(value = "/v1/transaction/{id}")
   public ApiResponse<String> updateTransaction(
-      @PathVariable UUID id, @RequestBody TransactionStatus status) {
+      @PathVariable UUID id, @RequestBody UpdateTransactionRequest request) {
 
     log.info("Received request to update transaction with id {}", id);
-    var transaction = transactionService.update(status, id);
+    var transaction = transactionService.update(TransactionStatus.valueOf(request.getStatus()), id);
 
     return ApiResponse.createSuccessResponse(
         "Transaction with id " + transaction.getId() + " updated successfully");

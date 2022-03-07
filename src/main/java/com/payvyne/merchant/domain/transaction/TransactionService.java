@@ -44,17 +44,17 @@ public class TransactionService {
   public Transaction update(TransactionStatus newStatus, UUID transactionId) {
 
     if (newStatus == TransactionStatus.DELETED) {
-      throw new TransactionException(ErrorCode.T4);
+      throw new InvalidTransactionRequestException(ErrorCode.T4);
     }
 
     var transaction = transactionRepositoryPort.getTransactionById(transactionId);
 
     if (transaction.isEmpty()) {
-      throw new TransactionException(ErrorCode.T1);
+      throw new TransactionNotFoundException(ErrorCode.T1);
     }
 
     if (transaction.get().getStatus() == newStatus) {
-      throw new TransactionException(ErrorCode.T2);
+      throw new InvalidTransactionRequestException(ErrorCode.T2);
     }
 
     var updatedTransaction =
@@ -76,7 +76,7 @@ public class TransactionService {
     var transaction = transactionRepositoryPort.getTransactionById(transactionId);
 
     if (transaction.isEmpty()) {
-      throw new TransactionException(ErrorCode.T1);
+      throw new TransactionNotFoundException(ErrorCode.T1);
     }
 
     var updatedTransaction =

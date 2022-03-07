@@ -152,7 +152,7 @@ class TransactionServiceTest {
 
     var exception =
         assertThrows(
-            TransactionException.class,
+            TransactionNotFoundException.class,
             () -> transactionService.update(newTransactionStatus, transaction.getId()));
 
     assertEquals(ErrorCode.T1, exception.getError());
@@ -189,7 +189,7 @@ class TransactionServiceTest {
 
     var exception =
         assertThrows(
-            TransactionException.class,
+            InvalidTransactionRequestException.class,
             () -> transactionService.update(newTransactionStatus, transaction.getId()));
 
     assertEquals(ErrorCode.T2, exception.getError());
@@ -225,7 +225,7 @@ class TransactionServiceTest {
 
     var exception =
         assertThrows(
-            TransactionException.class,
+            InvalidTransactionRequestException.class,
             () -> transactionService.update(newTransactionStatus, transaction.getId()));
 
     assertEquals(ErrorCode.T4, exception.getError());
@@ -308,7 +308,8 @@ class TransactionServiceTest {
 
     var exception =
         assertThrows(
-            TransactionException.class, () -> transactionService.delete(transaction.getId()));
+            TransactionNotFoundException.class,
+            () -> transactionService.delete(transaction.getId()));
 
     assertEquals(ErrorCode.T1, exception.getError());
     verify(transactionRepositoryPort, times(1)).getTransactionById(id);

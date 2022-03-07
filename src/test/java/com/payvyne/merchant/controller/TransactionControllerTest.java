@@ -22,6 +22,7 @@ import com.payvyne.merchant.domain.transaction.TransactionService;
 import com.payvyne.merchant.domain.transaction.TransactionStatus;
 import com.payvyne.merchant.exception.ErrorCode;
 import com.payvyne.merchant.rest.model.CreateTransactionRequest;
+import com.payvyne.merchant.rest.model.UpdateTransactionRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -115,13 +116,15 @@ public class TransactionControllerTest {
             .updatedAt(now)
             .build();
 
+    var request = new UpdateTransactionRequest(status.name());
+
     when(transactionService.update(status, id)).thenReturn(transaction);
 
     mockMvc
         .perform(
             put("/v1/transaction/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(status)))
+                .content(asJsonString(request)))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().json(expectedResponse));
