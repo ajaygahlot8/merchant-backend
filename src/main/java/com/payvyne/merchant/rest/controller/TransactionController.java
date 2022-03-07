@@ -73,10 +73,18 @@ public class TransactionController {
         transactionService.search(
             TransactionQuery.builder()
                 .date(date)
-                .currency(Currency.valueOf(currency))
-                .status(TransactionStatus.valueOf(status))
+                .currency(getCurrency(currency))
+                .status(getStatus(status))
                 .build());
 
     return ApiResponse.createSuccessResponse(GetTransactionsResponse.from(transactions));
+  }
+
+  private TransactionStatus getStatus(String status) {
+    return status != null ? TransactionStatus.valueOf(status) : null;
+  }
+
+  private Currency getCurrency(String currency) {
+    return currency != null ? Currency.valueOf(currency) : null;
   }
 }
