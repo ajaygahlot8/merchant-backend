@@ -11,5 +11,5 @@ public interface TransactionRepositoryPort {
 
   Transaction update(Transaction updatedTransaction);
 
-  List<Transaction> getAllTransactions();
+  List<Transaction> getAllTransactions(TransactionQuery transactionQuery);
 }

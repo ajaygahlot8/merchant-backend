@@ -93,7 +93,7 @@ public class TransactionService {
     return transactionRepositoryPort.update(updatedTransaction);
   }
 
-  public List<Transaction> search() {
-    return transactionRepositoryPort.getAllTransactions();
+  public List<Transaction> search(TransactionQuery transactionQuery) {
+    return transactionRepositoryPort.getAllTransactions(transactionQuery);
   }
 }

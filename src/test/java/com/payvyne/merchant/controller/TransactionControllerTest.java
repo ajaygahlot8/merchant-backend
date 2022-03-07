@@ -17,6 +17,7 @@ import com.payvyne.merchant.domain.transaction.Currency;
 import com.payvyne.merchant.domain.transaction.Transaction;
 import com.payvyne.merchant.domain.transaction.TransactionDetail;
 import com.payvyne.merchant.domain.transaction.TransactionException;
+import com.payvyne.merchant.domain.transaction.TransactionQuery;
 import com.payvyne.merchant.domain.transaction.TransactionService;
 import com.payvyne.merchant.domain.transaction.TransactionStatus;
 import com.payvyne.merchant.exception.ErrorCode;
@@ -199,15 +200,28 @@ public class TransactionControllerTest {
             .updatedAt(now.minusDays(1))
             .build();
 
-    when(transactionService.search()).thenReturn(List.of(transaction, transaction2));
+    var transactionQuery =
+        TransactionQuery.builder()
+            .status(status)
+            .currency(currency)
+            .date(now.toLocalDate())
+            .build();
+
+    when(transactionService.search(transactionQuery))
+        .thenReturn(List.of(transaction, transaction2));
 
     mockMvc
-        .perform(get("/v1/transactions").contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            get("/v1/transactions")
+                .param("status", status.name())
+                .param("currency", currency.name())
+                .param("date", now.toLocalDate().toString())
+                .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().json(expectedResponse));
 
-    verify(transactionService, times(1)).search();
+    verify(transactionService, times(1)).search(transactionQuery);
   }
 
   @Test

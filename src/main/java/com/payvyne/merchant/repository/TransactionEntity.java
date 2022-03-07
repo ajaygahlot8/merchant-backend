@@ -4,6 +4,8 @@ import com.payvyne.merchant.domain.transaction.Currency;
 import com.payvyne.merchant.domain.transaction.Transaction;
 import com.payvyne.merchant.domain.transaction.TransactionStatus;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
@@ -48,6 +50,19 @@ public class TransactionEntity {
         .description(transaction.getDescription().orElse(null))
         .createdAt(transaction.getCreatedAt())
         .updatedAt(transaction.getUpdatedAt())
+        .build();
+  }
+
+  public static TransactionEntity mapRow(ResultSet rs) throws SQLException {
+
+    return TransactionEntity.builder()
+        .id(UUID.fromString(rs.getString("id")))
+        .amount(rs.getBigDecimal("amount"))
+        .status(rs.getString("status"))
+        .currency(rs.getString("currency"))
+        .description(rs.getString("description"))
+        .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
+        .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())
         .build();
   }
 

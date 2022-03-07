@@ -1,18 +1,23 @@
 package com.payvyne.merchant.rest.controller;
 
+import com.payvyne.merchant.domain.transaction.Currency;
+import com.payvyne.merchant.domain.transaction.TransactionQuery;
 import com.payvyne.merchant.domain.transaction.TransactionService;
 import com.payvyne.merchant.domain.transaction.TransactionStatus;
 import com.payvyne.merchant.rest.ApiResponse;
 import com.payvyne.merchant.rest.model.CreateTransactionRequest;
 import com.payvyne.merchant.rest.model.GetTransactionsResponse;
+import java.time.LocalDate;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -57,10 +62,15 @@ public class TransactionController {
   }
 
   @GetMapping(value = "/v1/transactions")
-  public ApiResponse<GetTransactionsResponse> getAllTransactions() {
+  public ApiResponse<GetTransactionsResponse> getAllTransactions(
+      @RequestParam(required = false) TransactionStatus status,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+      @RequestParam(required = false) Currency currency) {
 
     log.info("Received request to get all transactions");
-    var transactions = transactionService.search();
+    var transactions =
+        transactionService.search(
+            TransactionQuery.builder().date(date).currency(currency).status(status).build());
 
     return ApiResponse.createSuccessResponse(GetTransactionsResponse.from(transactions));
   }

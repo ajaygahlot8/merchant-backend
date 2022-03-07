@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.payvyne.merchant.domain.transaction.Currency;
 import com.payvyne.merchant.domain.transaction.Transaction;
+import com.payvyne.merchant.domain.transaction.TransactionQuery;
 import com.payvyne.merchant.domain.transaction.TransactionStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @DataJdbcTest
 class TransactionDAOIntegrationTest {
@@ -26,9 +28,13 @@ class TransactionDAOIntegrationTest {
 
   @Autowired JdbcAggregateTemplate jdbcAggregateTemplate;
 
+  @Autowired NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
   @BeforeEach
   void setUp() {
-    transactionDao = new TransactionDAO(transactionRepository, jdbcAggregateTemplate);
+    transactionDao =
+        new TransactionDAO(
+            transactionRepository, jdbcAggregateTemplate, namedParameterJdbcTemplate);
   }
 
   @DisplayName("Should create transactions")
@@ -194,7 +200,13 @@ class TransactionDAOIntegrationTest {
     transactionDao.create(transaction);
     transactionDao.create(transaction2);
 
-    var actual = transactionDao.getAllTransactions();
+    TransactionQuery transactionQuery =
+        TransactionQuery.builder()
+            .status(status)
+            .currency(currency)
+            .date(yesterday.toLocalDate())
+            .build();
+    var actual = transactionDao.getAllTransactions(transactionQuery);
 
     assertEquals(2, actual.size());
   }

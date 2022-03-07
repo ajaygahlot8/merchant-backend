@@ -338,11 +338,19 @@ class TransactionServiceTest {
             .updatedAt(yesterday)
             .build();
 
-    when(transactionRepositoryPort.getAllTransactions()).thenReturn(List.of(transaction));
+    TransactionQuery transactionQuery =
+        TransactionQuery.builder()
+            .status(status)
+            .currency(currency)
+            .date(now.toLocalDate())
+            .build();
 
-    var actual = transactionService.search();
+    when(transactionRepositoryPort.getAllTransactions(transactionQuery))
+        .thenReturn(List.of(transaction));
+
+    var actual = transactionService.search(transactionQuery);
 
     assertEquals(List.of(transaction), actual);
-    verify(transactionRepositoryPort, times(1)).getAllTransactions();
+    verify(transactionRepositoryPort, times(1)).getAllTransactions(transactionQuery);
   }
 }
